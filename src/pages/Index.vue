@@ -1,6 +1,7 @@
 <template>
   <div style="height: 100vh;">
     <Header></Header>
+    <BookChannel :showBox="show_book" :columnId="column_id" @cancel="cancel_book"></BookChannel>
     <div ref="wrap" style="overflow: hidden;height: calc( 100% - 2rem )">
       <div>
         <div class="swiper_wrapper">
@@ -19,7 +20,7 @@
             <router-link :to="{name:'List',params:{id:item.column_id}}">
               <span class="fr" style="cursor:pointer;position: relative;top: 0.1rem;"><img src="../assets/more.png" alt="" style="width: 32px;"></span>
             </router-link>
-            <span class="fr" ><img src="../assets/ding.png" alt="" style="margin-right: 0.5rem;width: 24px;"></span>
+            <span @click="bookNow(item.column_id)" class="fr" ><img src="../assets/ding.png" alt="" style="margin-right: 0.5rem;width: 24px;"></span>
           </p>
           <div class="pic_box" v-for="(msg, num) in item.contentlist3" :key="msg.content_id">
            <router-link :to="{name:'Detail',params:{id: msg.content_id }}">
@@ -39,6 +40,7 @@
 
 <script>
   import Header from '@/components/Header'
+  import BookChannel from '@/components/BookChannel'
   import { mapState } from 'vuex'
   import api from '@/js/api'
   import BScroll from 'better-scroll'
@@ -54,14 +56,17 @@
           autoplayDisableOnInteraction:false,
           paginationClickable:true
         },
-        indexList:null
+        indexList:null,
+        show_book:false,
+        column_id:''
       }
     },
     computed: {
       ...mapState( ['q_id'] )
     },
     components: {
-      Header
+      Header,
+      BookChannel
     },
     created () {
       this.get_swiper()
@@ -97,6 +102,13 @@
         }else if(type == 3){
           return "热播"
         }
+      },
+      bookNow (id) {
+        this.show_book = true
+        this.column_id = id
+      },
+      cancel_book () {
+        this.show_book = false
       },
       get_swiper () {
         let  params = {

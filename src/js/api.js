@@ -72,7 +72,12 @@ export default {
   details (params) {
     return fetchGet('/webapi/company/contentdetails',params)
   },
-
+  /**
+   *.添加频道订阅
+   * */
+  book_channel (params) {
+    return fetchGet('/appapi/bookchannel/bookchannel',params)
+  },
 }
 
 

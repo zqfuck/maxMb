@@ -4,11 +4,11 @@
       <p>{{video_name}}</p>
     </div>
     <div class="video_wrapper">
-      <div v-if="video_show" class="video_box" id="videoSS">
+      <div v-if="video_show!=1" class="video_box" id="videoSS">
       </div>
       <div v-else class="book_box">
         <Book :showBox="show_book" @cancel="cancel_book"></Book>
-        <p style="font-size: 0.5rem;">29小时36分28秒</p>
+        <p style="font-size: 0.5rem;">{{time_count}}</p>
         <p><button id="book_btn" @click="bookNow">立即预约</button></p>
       </div>
     </div>
@@ -28,7 +28,7 @@
           <div class="intro_box">
             <div style="padding-bottom: 0.5rem;border-bottom: 1px solid #cdcdcd">
               <p style="margin: 0.45rem 0 0.35rem 0;">
-              <span style="color: #4c5568;font-size: 0.3rem;display: inline-block;width: 50%;">{{video_name}}</span>
+              <span style="color: #4c5568;font-size: 0.26rem;display: inline-block;width: 50%;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{video_name}}</span>
                 <span ><img class="little_img" style="margin-top: 0.1rem;" src="../assets/eye.png" alt=""><span class="font_">{{pv}}</span></span>
                 <span ><img class="little_img" src="../assets/zan.png" alt=""><span class="font_">{{like}}</span></span>
               </p>
@@ -38,10 +38,10 @@
             </div>
             <div style="padding-bottom: 0.5rem;">
               <p style="margin: 0.45rem 0 0.35rem 0;">
-              <span style="color: #4c5568;font-size: 0.3rem;display: inline-block;width: 50%;">
+              <span style="color: #4c5568;font-size: 0.26rem;display: inline-block;width: 50%;">
                 频道介绍</span>
               </p>
-              <p style="font-size: 0.28rem;color: #646e83;line-height:26px;text-align: justify;">
+              <p style="font-size: 0.26rem;color: #646e83;line-height:26px;text-align: justify;">
                  <span>{{column_desc}}</span>
               </p>
             </div>
@@ -52,7 +52,7 @@
             <div style="margin-right: 0.16rem;width: 0.85rem;height: 0.85rem;">
               <img style="width: 100%;border-radius: 50%;height: 100%;" :src='item.img ? item.img : "../assets/head.png"' alt="">
             </div>
-            <div>
+            <div style="width: 80%;">
               <p style="color: #4c5568;font-size: 0.28rem;margin-bottom: 0.35rem;"><span style="margin-right: 0.3rem;">{{item.guest_name}}</span>
                 <span v-show="item.sex==0">先生</span><span v-show="item.sex==1">女士</span></p>
               <p style="font-size: 0.26rem;color: #646e83;line-height: 28px;">{{item.guest_desc}}</p>
@@ -63,21 +63,17 @@
               <span style="display: inline-block;width: 0.05rem;height: 0.3rem;background: #db2e32;margin-right: 0.1rem;"></span>
               <span style="color: #4c5568;font-size: 0.3rem;">关联节目</span>
             </p>
-            <div style="display: flex;justify-content: space-between;padding-bottom: 0.4rem;">
-              <div style="width: 47%;text-align: center;">
-                <img style="height: 1.8rem;margin-bottom: 0.3rem;" src="../assets/ban.jpg" alt="">
-                <p>打个电话的</p>
-              </div>
-              <div style="width: 47%;text-align: center;">
-                <img style="height: 1.8rem;margin-bottom: 0.3rem;" src="../assets/ban.jpg" alt="">
-                <p>打个电话的</p>
+            <div style="/*display: flex;justify-content: space-between;*/padding-bottom: 0.4rem;">
+              <div style="width: 45%;text-align: center;float: left;margin: 0 0.1rem" v-for="(item, index) in guest_relevance" @click="toDetail(item.content_id)">
+                <img style="height: 1.8rem;margin-bottom: 0.3rem;" :src='item.img?item.img:"../../static/ban.jpg"' alt="">
+                <p>{{item.name}}</p>
               </div>
             </div>
           </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="3">
-            <div class="recommend" v-for="(item,index) in recommend_data">
-              <img :src='item.img ? item.img : "../assets/ban.jpg"' alt="">
+            <div class="recommend" v-for="(item,index) in recommend_data" @click="toDetail(item.cid)">
+              <img :src='item.img?item.img:"../../static/ban.jpg"' alt="" >
               <p>{{item.name}}</p>
               <span>{{live_type (item.type)}}</span>
             </div>
@@ -98,17 +94,21 @@
     },
     data () {
       return {
-        video_show: false,
+        c_id:this.$route.params.id,
+        video_show: '',
         selected:"1",
         male:true,
         show_book:false,
         video_name:null,
+        time_count:null,
+        live_start:null,
         poster:'',
         pv:'',
         like:'',
         video_url:null,
         content_desc:null, //内容介绍
         column_desc:null, //频道介绍
+        guest_relevance:[],//嘉宾相关视频
         guest:[],//本期嘉宾,
         recommend_data:[] //精彩推荐
       }
@@ -116,9 +116,15 @@
     mounted () {
       this.details()
       setTimeout( () => {
-        this.scroll = new BScroll('.mint-tab-container')
-      },0)
-      this.initVideo ()
+        this.scroll = new BScroll('.mint-tab-container',{
+          click:  true ,
+          tap: true
+        })
+      },100)
+
+    },
+    computed:{
+
     },
     methods: {
       initVideo () {
@@ -144,9 +150,13 @@
       cancel_book () {
         this.show_book = false
       },
+      toDetail (cid){
+        this.c_id = cid
+        this.details ()
+      },
       details () {
         let params = {
-          cid:this.$route.params.id
+          cid:this.c_id
         }
         api.details(params).then(res => {
           console.log(res)
@@ -156,17 +166,47 @@
             this.poster = result.detail_data.content_img
             this.pv = result.detail_data.pv
             this.like = result.detail_data.like
+            this.video_show = result.detail_data.live_type
             this.video_url = result.detail_data.video_url
             this.content_desc = result.detail_data.content_desc
             this.column_desc = result.detail_data.column_desc
             this.guest = result.guest_data
+            this.guest_relevance = result.guest_relevance
             this.recommend_data = result.recommend_data
+            if(this.video_show!=1){
+              this.initVideo ()
+            };
+            if(this.video_show==1){
+              this.live_start = result.detail_data.live_start
+              this.leftTime(this.live_start)
+              var timer = setInterval( () => {
+                if(this.live_start - (new Date().getTime())<=0){
+                  clearInterval(timer)
+                }
+                this.leftTime(this.live_start)
+              },1000)
+            }
           }
-          console.log(this.pv)
         }).catch(err => {
           console.log(err)
         })
-      }
+      },
+      leftTime (time){
+        var leftTime = time - (new Date().getTime()); //计算剩余的毫秒数
+        var hours = parseInt(leftTime / 1000 / 60 / 60 , 10); //计算剩余的小时
+        var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);//计算剩余的分钟
+        var seconds = parseInt(leftTime / 1000 % 60, 10);//计算剩余的秒数
+        hours = this.checkTime(hours);
+        minutes = this.checkTime(minutes);
+        seconds = this.checkTime(seconds);
+        this.time_count = hours+"小时" + minutes+"分"+seconds+"秒";
+      },
+      checkTime (i){
+        if(i<10) {
+          i = "0" + i;
+        }
+        return i;
+      },
     }
   }
 </script>

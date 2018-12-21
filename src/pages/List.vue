@@ -8,11 +8,13 @@
         </div>
         <div class="channel_list">
           <div class="pic_box" v-for="(item, index) in channelList">
-            <div class="img_box">
-              <img :src='item.img?item.img:"../../static/ban.jpg"' alt="">
-              <span class="status_text">{{live_type (item.type)}}</span>
-            </div>
-            <p style="margin-top: 0.35rem;text-align: left;font-size: 0.28rem">{{item.description}}</p>
+            <router-link :to="{name:'Detail',params:{id:item.cid}}">
+              <div class="img_box">
+                <img :src='item.img?item.img:"../../static/ban.jpg"' alt="">
+                <span class="status_text">{{live_type (item.live_type)}}</span>
+              </div>
+              <p style="margin-top: 0.35rem;text-align: left;font-size: 0.28rem">{{item.description}}</p>
+            </router-link>
           </div>
         </div>
       </v-loadmore>

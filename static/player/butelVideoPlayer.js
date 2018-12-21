@@ -10,7 +10,7 @@ function butelVideoPlayerBarrage( txt ){
 	liveStream.barrageText( txt );
 }
 
-var isDebugMode = true;//调试模式
+var isDebugMode = false;//调试模式
 
 var butelPlayerLoadTime = new Date();
 
