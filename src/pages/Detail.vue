@@ -7,7 +7,7 @@
       <div v-if="video_show!=1" class="video_box" id="videoSS">
       </div>
       <div v-else class="book_box">
-        <Book :showBox="show_book" @cancel="cancel_book"></Book>
+        <Book :showBox="show_book" :cid="this.c_id" @cancel="cancel_book"></Book>
         <p style="font-size: 0.5rem;">{{time_count}}</p>
         <p><button id="book_btn" @click="bookNow">立即预约</button></p>
       </div>
@@ -28,9 +28,9 @@
           <div class="intro_box">
             <div style="padding-bottom: 0.5rem;border-bottom: 1px solid #cdcdcd">
               <p style="margin: 0.45rem 0 0.35rem 0;">
-              <span style="color: #4c5568;font-size: 0.26rem;display: inline-block;width: 50%;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{video_name}}</span>
+              <span style="color: #4c5568;font-size: 0.28rem;display: inline-block;width: 50%;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{video_name}}</span>
                 <span ><img class="little_img" style="margin-top: 0.1rem;" src="../assets/eye.png" alt=""><span class="font_">{{pv}}</span></span>
-                <span ><img class="little_img" src="../assets/zan.png" alt=""><span class="font_">{{like}}</span></span>
+                <span ><img class="little_img" src="../assets/zan.png" alt=""  @click="zan"><span class="font_">{{like}}</span></span>
               </p>
               <p style="font-size: 0.28rem;color: #646e83;line-height:26px;text-align: justify;">
                 简介: <span>{{content_desc}}</span>
@@ -38,10 +38,10 @@
             </div>
             <div style="padding-bottom: 0.5rem;">
               <p style="margin: 0.45rem 0 0.35rem 0;">
-              <span style="color: #4c5568;font-size: 0.26rem;display: inline-block;width: 50%;">
+              <span style="color: #4c5568;font-size: 0.28rem;display: inline-block;width: 50%;">
                 频道介绍</span>
               </p>
-              <p style="font-size: 0.26rem;color: #646e83;line-height:26px;text-align: justify;">
+              <p style="font-size: 0.28rem;color: #646e83;line-height:26px;text-align: justify;">
                  <span>{{column_desc}}</span>
               </p>
             </div>
@@ -64,9 +64,9 @@
               <span style="color: #4c5568;font-size: 0.3rem;">关联节目</span>
             </p>
             <div style="/*display: flex;justify-content: space-between;*/padding-bottom: 0.4rem;">
-              <div style="width: 45%;text-align: center;float: left;margin: 0 0.1rem" v-for="(item, index) in guest_relevance" @click="toDetail(item.content_id)">
-                <img style="height: 1.8rem;margin-bottom: 0.3rem;" :src='item.img?item.img:"../../static/ban.jpg"' alt="">
-                <p>{{item.name}}</p>
+              <div style="width: 45%;text-align: center;float: left;margin: 0 0.1rem 0.2rem 0.1rem" v-for="(item, index) in guest_relevance" @click="toDetail(item.content_id)">
+                <img style="height: 1.8rem;margin-bottom: 0.3rem;" :src='item.content_img?item.content_img:"../../static/ban.jpg"' alt="">
+                <p>{{item.name|delstr}}</p>
               </div>
             </div>
           </div>
@@ -105,6 +105,7 @@
         poster:'',
         pv:'',
         like:'',
+        tid:'',
         video_url:null,
         content_desc:null, //内容介绍
         column_desc:null, //频道介绍
@@ -151,10 +152,12 @@
         this.show_book = false
       },
       toDetail (cid){
+        this.$router.push({name:'Detail',params:{id:cid}})
         this.c_id = cid
         this.details ()
       },
       details () {
+        console.log(this.c_id)
         let params = {
           cid:this.c_id
         }
@@ -166,6 +169,7 @@
             this.poster = result.detail_data.content_img
             this.pv = result.detail_data.pv
             this.like = result.detail_data.like
+            this.tid = result.detail_data.tid
             this.video_show = result.detail_data.live_type
             this.video_url = result.detail_data.video_url
             this.content_desc = result.detail_data.content_desc
@@ -189,6 +193,17 @@
           }
         }).catch(err => {
           console.log(err)
+        })
+      },
+      zan(){
+        let params = {
+          topic_id:this.tid
+        }
+        params =JSON.stringify(params)
+        api.click_zan(params).then(res => {
+            this.like = res.likes
+        }).catch(err => {
+            console.log(err)
         })
       },
       leftTime (time){

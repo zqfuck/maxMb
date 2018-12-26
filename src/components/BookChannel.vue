@@ -45,28 +45,73 @@
     methods: {
       timeOut () {
         if(this.checkPhone(this.tel)){
-
-          this.time=!this.time
-          let timer = setInterval( () => {
-            this.timeCount--
-            if( this.timeCount<0) {
-              clearInterval(timer)
+          let params = {
+            phone:this.tel,
+            channel:this.columnId
+          }
+          api.getCode(params).then(res => {
+            console.log(res)
+            if(res.state.rc == -1){
+              Toast({
+                message: '您已经订阅过此频道',
+                duration: 2000
+              })
+              this.tel = ''
+              this.code = ''
+              this.$emit('cancel')
+            }else {
               this.time=!this.time
-              this.timeCount = 60
+              Toast({
+                message: '短信验证码已发送您的手机',
+                duration: 2000
+              })
+              let timer = setInterval( () => {
+                this.timeCount--
+                if( this.timeCount<0) {
+                  clearInterval(timer)
+                  this.time=!this.time
+                  this.timeCount = 60
+                }
+              },1000)
             }
-          },1000)
+          }).catch(err => {
+            console.log(err)
+          })
+        }else {
+          Toast({
+            message: '请输入正确手机号',
+            duration: 2000
+          })
         }
       },
       book_channel(){
         if(this.checkPhone(this.tel)){
           if(this.code!=''){
-            let params = {
+            var params = {
               phone:this.tel,
               channel:this.columnId,
               code:this.code
             }
+            params = JSON.stringify(params)
             api.book_channel(params).then(res => {
               console.log(res)
+              if(res.state.rc==0){
+                Toast({
+                  message: '订阅成功',
+                  duration: 2000
+                })
+                this.tel = ''
+                this.code = ''
+                this.$emit('cancel')
+              }else {
+                Toast({
+                  message: '您已经订阅过此频道',
+                  duration: 2000
+                })
+                this.tel = ''
+                this.code = ''
+                this.$emit('cancel')
+              }
             }).catch(err => {
               console.log(err)
             })
@@ -88,7 +133,7 @@
       },
       checkPhone (phone) {
         var len = phone.length;
-        if (len != 11 || !isPhoneNumber(phone)) {
+        if (len != 11 || !this.isPhoneNumber(phone)) {
           return false;
         }
         return true;
@@ -101,7 +146,7 @@
         if (phoneNumber.length != 11) {
           isPhone = false;
         }
-        var str = "^[1][3,4,5,7,8][0-9]{9}$";
+        var str = "^[1][3,4,5,7,8,9][0-9]{9}$";
         //var str=/^[1][3,4,5,7,8][0,9]{9}$/;
         if (!phoneNumber.match(str)) {
           isPhone = false;

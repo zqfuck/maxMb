@@ -7,7 +7,6 @@ import store from './store'
 //import fastClick from 'fastclick'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import Mint from 'mint-ui'
-
 import '../static/rem'
 import '../static/css/reset.css'
 import '../static/css/border.css'
@@ -17,7 +16,11 @@ import 'mint-ui/lib/style.css'
 Vue.config.productionTip = false
 Vue.use(VueAwesomeSwiper)
 Vue.use(Mint)
+Vue.use(require('vue-wechat-title'))
 /* eslint-disable no-new */
+Vue.filter('delstr',(val) => {
+  return val.substr(0,9)
+})
 new Vue({
   el: '#app',
   router,

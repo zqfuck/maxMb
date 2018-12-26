@@ -79,7 +79,7 @@
       })
     },
     mounted () {
-
+      this.$store.commit('changeTitle','直播首页')
     },
     methods: {
       list () {
@@ -88,7 +88,7 @@
         }
         params = JSON.stringify(params)
         api.indexList(params).then(res => {
-          console.log(res)
+         // console.log(res)
           this.indexList = res.result.data
         }).catch(err => {
           console.log(err)
@@ -116,7 +116,7 @@
           type:1
         }
         api.rankList(params).then(res => {
-          console.log(res)
+         // console.log(res)
           if(res.data.length>0){
             this.swiperImg = res.data
           }

@@ -9,7 +9,7 @@
         </p>
         <p><input type="text" placeholder="请输入验证码" v-model="code" style="width: 60%;height: 0.5rem;"></p>
         <p>通过手机号订阅之后</br>本频道有更新会下发到您的手机</p>
-        <p><button @click="cancel" class="cancel">取消</button><button class="book">预约</button></p>
+        <p><button @click="cancel" class="cancel">取消</button><button @click="book" class="book">预约</button></p>
       </div>
     <div v-show="showBox" class="mask">
 
@@ -18,18 +18,20 @@
 </template>
 
 <script>
+  import { Toast } from 'mint-ui'
+  import api from '@/js/api'
   export default {
     name: 'Book',
     data () {
       return {
-        tel:null,
-        code:null,
+        tel:'',
+        code:'',
         time:true,
         showBook:this.showBox,
         timeCount:60
       }
     },
-    props: [ 'showBox' ],
+    props: [ 'showBox','cid' ],
     watch: {
       tel (newVal) {
         if (newVal.length>11){
@@ -38,22 +40,118 @@
       }
     },
     mounted () {
-
+     // console.log(this.cid)
     },
     methods: {
       timeOut () {
-        this.time=!this.time
-        let timer = setInterval( () => {
-          this.timeCount--
-          if( this.timeCount<0) {
-            clearInterval(timer)
-            this.time=!this.time
-            this.timeCount = 60
+        if(this.checkPhone(this.tel)){
+          let params = {
+            phone:this.tel,
+            id:this.cid,
+            type:1
           }
-        },1000)
+          api.book_code(params).then(res => {
+           // console.log(res)
+            if(res.state.rc == -1){
+              Toast({
+                message: '您已经预约过此内容',
+                duration: 2000
+              })
+              this.tel = ''
+              this.code = ''
+              this.$emit('cancel')
+            }else {
+              this.time=!this.time
+              Toast({
+                message: '短信验证码已发送您的手机',
+                duration: 2000
+              })
+              let timer = setInterval( () => {
+                this.timeCount--
+                if( this.timeCount<0) {
+                  clearInterval(timer)
+                  this.time=!this.time
+                  this.timeCount = 60
+                }
+              },1000)
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+        }else {
+          Toast({
+            message: '请输入正确手机号',
+            duration: 2000
+          })
+        }},
+      book(){
+        if(this.checkPhone(this.tel)){
+          if(this.code!=''){
+            var params = {
+              phone:this.tel,
+              id:this.cid,
+              imgcode:this.code,
+              type:1
+            }
+            api.book(params).then(res => {
+            //  console.log(res)
+              if(res.state.rc==0){
+                Toast({
+                  message: '预约成功',
+                  duration: 2000
+                })
+                this.tel = ''
+                this.code = ''
+                this.$emit('cancel')
+              }else {
+                Toast({
+                  message: '您已经预约过此内容',
+                  duration: 2000
+                })
+                this.tel = ''
+                this.code = ''
+                this.$emit('cancel')
+              }
+            }).catch(err => {
+              console.log(err)
+            })
+          }else {
+            Toast({
+              message: '请输入验证码',
+              duration: 2000
+            })
+          }
+        }else {
+          Toast({
+            message: '请填写正确手机号',
+            duration: 2000
+          })
+        }
       },
       cancel () {
         this.$emit('cancel')
+      },
+      checkPhone (phone) {
+        var len = phone.length;
+        if (len != 11 || !this.isPhoneNumber(phone)) {
+          return false;
+        }
+        return true;
+      },
+      isPhoneNumber (phoneNumber) {
+        var isPhone = true;
+        if (phoneNumber == null || phoneNumber == '') {
+          isPhone = false;
+        }
+        if (phoneNumber.length != 11) {
+          isPhone = false;
+        }
+        var str = "^[1][3,4,5,7,8,9][0-9]{9}$";
+        //var str=/^[1][3,4,5,7,8][0,9]{9}$/;
+        if (!phoneNumber.match(str)) {
+          isPhone = false;
+        }
+        return isPhone;
       }
     }
   }

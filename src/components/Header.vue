@@ -2,7 +2,7 @@
   <div>
     <header class="wrapper" ref="wrapper">
       <ul class="menu_Nav " ref="li_list">
-        <router-link v-for="(item,idex) in title_list" tag="span" :key="item.column_id" :to="{name: 'List', params:{id: item.column_id}}">
+        <router-link  v-for="(item,idex) in title_list" tag="span" :key="item.column_id" :to="{name: 'List', params:{id: item.column_id,column_img:item.column_img,title:item.column_name}}">
           <li class="nav_list">{{item.column_name}}</li>
         </router-link>
       </ul>
@@ -18,9 +18,9 @@
      <div class="rank">
        <p><span class="fl" style="color: #db2e32;font-size: 0.28rem">排行榜</span> <span class="fr" @click="cancel_rank">取消</span></p>
        <ul class="rankList">
-         <router-link v-for="(item,index) in rank_list" :key="item.cid" :to="{name:'Detail',params:{cid:item.cid}}">
-           <li ><span>{{index+1}}</span>{{item.title}}</li>
-         </router-link>
+           <li @click="toDetail(item.cid)" v-for="(item,index) in rank_list" :key="item.cid">
+             <span :class="{first:index==0,second:index==1,third:index==2}">{{index+1}}</span>{{item.title}}
+           </li>
        </ul>
      </div>
     </div>
@@ -31,7 +31,7 @@
       </div>
       <div class="search_list">
         <ul>
-          <router-link v-for="(item,index) in sear_list" :key="item.cid" :to="{name:'Detail',params:{cid:item.cid}}">
+          <router-link v-for="(item,index) in sear_list" :key="item.cid" :to="{name:'Detail',params:{id:item.cid}}">
             <li >{{item.name}}</li>
           </router-link>
         </ul>
@@ -89,7 +89,7 @@
         id:'Mg=='
       }
       api.titleList(params).then(res => {
-        console.log(res)
+        //console.log(res)
         this.title_list = res.result
         if(this.title_list.length>4){
           this.$refs.li_list.style.width = (28 * this.title_list.length) + '%';
@@ -131,6 +131,9 @@
        this.$nextTick( () => {
          this.$refs.inp.focus()
        })
+     },
+     toDetail (cid) {
+       this.$router.push({name:'Detail',params:{id: cid }})
      },
      cancel_rank () {
        this.rank_show = false
@@ -258,6 +261,16 @@
     text-align: center;
     line-height: 0.35rem;
     margin-right: 0.2rem;
+    color: #fff;
+  }
+  .first{
+    background: #ee3e3e !important;
+  }
+  .second{
+    background: #ee993e !important;
+  }
+  .third{
+    background: #eedf3e !important;
   }
   .sear_box .inp_box{
     padding: 0.1rem 0 0.2rem;

@@ -1,10 +1,10 @@
 <template>
-  <div style="height: 100vh;">
+  <div style="height: 100vh;background: #fff;">
     <Header></Header>
     <div style="overflow: scroll;height: calc( 100% - 2rem )">
       <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <div class="banner_wrapper">
-          <img src="../../static/ban.jpg" alt="">
+          <img :src='this.column_img?this.column_img:"../../static/ban.jpg"' alt="">
         </div>
         <div class="channel_list">
           <div class="pic_box" v-for="(item, index) in channelList">
@@ -34,7 +34,7 @@
       return {
         channelList:[],
         page: 1,
-        pagesize: 8,
+        pagesize: 6,
         allLoaded: false, /* 是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了 */
         scrollMode: 'auto', /* 移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动 */
         totalPage: ''
@@ -44,6 +44,12 @@
       ...mapState(['q_id']),
       columnid () {
         return this.$route.params.id
+      },
+      column_img () {
+        return this.$route.params.column_img
+      },
+      column_title () {
+        return this.$route.params.title
       }
     },
     components: {
@@ -56,7 +62,11 @@
     },
     watch: {
       columnid (val,oldval) {
+        this.page = 1
         this.rePageList()
+        this.allLoaded = false
+        //document.title = this.column_title
+        this.$store.commit('changeTitle',this.column_title)
       }
     },
     methods: {
@@ -91,10 +101,10 @@
           columnid:this.columnid
         }
         api.channelList(data).then(res => {
-          console.log(res)
+          //console.log(res)
           if(res.state.rc>=0){
             this.channelList = res.result.items
-            this.totalPage = res.result.totalpage
+            this.totalPage = Math.ceil(res.result.totalcount/this.pagesize)
             this.$nextTick(function () {
               this.scrollMode = 'touch'
             })
@@ -112,9 +122,11 @@
           columnid:this.columnid
         }
         api.channelList(data).then(res => {
-          console.log(res)
+          //console.log(res)
           if(res.state.rc>=0){
-            this.channelList.push(res.result.items)
+            res.result.items.forEach(function (item, index) {
+              that.channelList.push(item)
+            })
             this.$nextTick(function () {
               this.scrollMode = 'touch'
             })

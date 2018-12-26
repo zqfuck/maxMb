@@ -73,10 +73,34 @@ export default {
     return fetchGet('/webapi/company/contentdetails',params)
   },
   /**
+   *.频道订阅获取验证码
+   * */
+  getCode (params) {
+    return fetchGet('/appapi/bookchannel/sendcode',params)
+  },
+  /**
    *.添加频道订阅
    * */
   book_channel (params) {
-    return fetchGet('/appapi/bookchannel/bookchannel',params)
+    return fetchPost('/appapi/bookchannel/bookchannel',params)
+  },
+  /**
+   *.点赞
+   * */
+  click_zan (params) {
+    return fetchPost('/like',params)
+  },
+  /**
+   *.预约短信验证码
+   * */
+  book_code (params) {
+    return fetchGet('/appapi/wx/sendcode',params)
+  },
+  /**
+   *.预约
+   * */
+  book (params) {
+    return fetchGet('/appapi/wx/book',params)
   },
 }
 
