@@ -13,7 +13,8 @@
       </div>
     </div>
     <div class="go_recommend">
-      <p>立即了解本栏目推荐的产品</p>
+      <p v-if="product_link"><a :href="product_link" style="color: inherit!important;">立即了解本栏目推荐的产品</a></p>
+      <p v-else>本栏目暂无推荐的产品</p>
     </div>
     <div class="tab_box">
       <mt-navbar v-model="selected">
@@ -32,8 +33,8 @@
                 <span ><img class="little_img" style="margin-top: 0.1rem;" src="../assets/eye.png" alt=""><span class="font_">{{pv}}</span></span>
                 <span ><img class="little_img" src="../assets/zan.png" alt=""  @click="zan"><span class="font_">{{like}}</span></span>
               </p>
-              <p style="font-size: 0.28rem;color: #646e83;line-height:26px;text-align: justify;">
-                简介: <span>{{content_desc}}</span>
+              <p id="intro" style="font-size: 0.28rem;color: #646e83;line-height:26px;">
+                <span style="text-align: left;">简介:</span> <span v-html="content_desc"></span>
               </p>
             </div>
             <div style="padding-bottom: 0.5rem;">
@@ -106,6 +107,7 @@
         pv:'',
         like:'',
         tid:'',
+        product_link:'',
         video_url:null,
         content_desc:null, //内容介绍
         column_desc:null, //频道介绍
@@ -170,6 +172,7 @@
             this.pv = result.detail_data.pv
             this.like = result.detail_data.like
             this.tid = result.detail_data.tid
+            this.product_link = result.detail_data.product_link
             this.video_show = result.detail_data.live_type
             this.video_url = result.detail_data.video_url
             this.content_desc = result.detail_data.content_desc
@@ -297,7 +300,7 @@
     border-radius: 8px;
   }
   .mint-navbar >>> .is-selected {
-    border-bottom: 7px solid #db2e32;
+    border-bottom: 7px solid #db2e32!important;
   }
   .mint-navbar >>> .is-selected .mint-tab-item-label{
     color: #4c5568;
@@ -341,5 +344,8 @@
     border-radius: 15px;
     color: #fff;
     background: #db2e32;
+  }
+  #intro img{
+    width: 100%;
   }
 </style>
