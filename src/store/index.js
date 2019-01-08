@@ -5,7 +5,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     q_id: 'Mg==',
-    title: '直播首页'
+    title: '首页'
   },
   actions: {
 

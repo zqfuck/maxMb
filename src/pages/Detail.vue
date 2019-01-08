@@ -124,7 +124,6 @@
           tap: true
         })
       },100)
-
     },
     computed:{
 
@@ -180,6 +179,7 @@
             this.guest = result.guest_data
             this.guest_relevance = result.guest_relevance
             this.recommend_data = result.recommend_data
+            this.$store.commit('changeTitle',this.video_name)
             if(this.video_show!=1){
               this.initVideo ()
             };
