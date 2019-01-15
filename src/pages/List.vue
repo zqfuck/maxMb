@@ -4,7 +4,7 @@
     <div style="overflow: scroll;height: calc( 100% - 2rem )">
       <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <div class="banner_wrapper">
-          <img :src='this.column_img?this.column_img:"../../static/ban.jpg"' alt="">
+          <img :src='this.column_img?this.column_img:"http://qnrj-vod.homecdn.com/a0113b521fd74ace8558cedadc91508c.png"' alt="">
         </div>
         <div class="channel_list">
           <div class="pic_box" v-for="(item, index) in channelList">

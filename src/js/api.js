@@ -4,7 +4,7 @@
 
 import axios from 'axios'
 // axios 配置
-axios.defaults.timeout = 3000
+axios.defaults.timeout = 5000
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 axios.defaults.baseURL = 'http://livetapi.v114.com'
 
@@ -101,6 +101,12 @@ export default {
    * */
   book (params) {
     return fetchGet('/appapi/wx/book',params)
+  },
+  /**
+   *.密码鉴定
+   * */
+  check_pass (params) {
+    return fetchGet('/appapi/wx/authorize',params)
   },
 }
 

@@ -3,13 +3,19 @@
     <div class="title">
       <p>{{video_name}}</p>
     </div>
-    <div class="video_wrapper">
+    <div class="video_wrapper" ref="video_wrapper" :style="style_back">
       <div v-if="video_show!=1" class="video_box" id="videoSS">
       </div>
       <div v-else class="book_box">
         <Book :showBox="show_book" :cid="this.c_id" @cancel="cancel_book"></Book>
         <p style="font-size: 0.5rem;">{{time_count}}</p>
-        <p><button id="book_btn" @click="bookNow">立即预约</button></p>
+        <p v-if="isBook"><button class="book_btn"  @click="bookNow">立即预约</button></p>
+        <p v-else><span class="book_btn" >敬请期待</span></p>
+      </div>
+      <div v-if="passW" class="pass_watch ">
+        <p style="font-size: 0.3rem;color: #db2e32;font-weight: bold;">请输入观看密码</p>
+        <p><input type="text" v-model="passCode" placeholder="请输入密码"  style="width: 60%;height: 35px;"></p>
+        <p><button class="book_btn pass_type" @click="pass_watch">确定</button></p>
       </div>
     </div>
     <div class="go_recommend">
@@ -86,6 +92,7 @@
 
 <script>
   import BScroll from 'better-scroll'
+  import { Toast } from 'mint-ui'
   import api from '@/js/api'
   import Book from '@/components/Book'
   export default {
@@ -113,7 +120,14 @@
         column_desc:null, //频道介绍
         guest_relevance:[],//嘉宾相关视频
         guest:[],//本期嘉宾,
-        recommend_data:[] //精彩推荐
+        recommend_data:[], //精彩推荐
+        watch_type:'',
+        isBook:false,
+        passCode:'',
+        passW:false, //密码确认
+        style_back:{
+
+        }
       }
     },
     mounted () {
@@ -124,6 +138,12 @@
           tap: true
         })
       },100)
+    },
+    watch:{
+      video_show (val,oldVal) {
+        //console.log(val,oldVal)
+        //this.details()
+      }
     },
     computed:{
 
@@ -156,9 +176,9 @@
         this.$router.push({name:'Detail',params:{id:cid}})
         this.c_id = cid
         this.details ()
+        location.reload()
       },
       details () {
-        console.log(this.c_id)
         let params = {
           cid:this.c_id
         }
@@ -170,6 +190,7 @@
             this.poster = result.detail_data.content_img
             this.pv = result.detail_data.pv
             this.like = result.detail_data.like
+            this.watch_type = result.detail_data.watch_type
             this.tid = result.detail_data.tid
             this.product_link = result.detail_data.product_link
             this.video_show = result.detail_data.live_type
@@ -181,9 +202,25 @@
             this.recommend_data = result.recommend_data
             this.$store.commit('changeTitle',this.video_name)
             if(this.video_show!=1){
-              this.initVideo ()
+              if(this.watch_type==1){
+                  this.passW = true
+                this.style_back = {
+                  background:'url('+ this.poster +') no-repeat center',
+                  backgroundSize:'cover'
+                }
+              }else {
+                this.initVideo ()
+              }
+            }else {
+              this.style_back = {
+                background:'url('+ this.poster +') no-repeat center',
+                backgroundSize:'cover'
+              }
             };
             if(this.video_show==1){
+              if (this.watch_type==2||this.watch_type==3){
+                this.isBook = true
+              }
               this.live_start = result.detail_data.live_start
               this.leftTime(this.live_start)
               var timer = setInterval( () => {
@@ -210,14 +247,37 @@
         })
       },
       leftTime (time){
-        var leftTime = time - (new Date().getTime()); //计算剩余的毫秒数
-        var hours = parseInt(leftTime / 1000 / 60 / 60 , 10); //计算剩余的小时
-        var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);//计算剩余的分钟
-        var seconds = parseInt(leftTime / 1000 % 60, 10);//计算剩余的秒数
-        hours = this.checkTime(hours);
-        minutes = this.checkTime(minutes);
-        seconds = this.checkTime(seconds);
-        this.time_count = hours+"小时" + minutes+"分"+seconds+"秒";
+        if(time<=86400000){
+          var leftTime = time - (new Date().getTime()); //计算剩余的毫秒数
+          var hours = parseInt(leftTime / 1000 / 60 / 60 , 10); //计算剩余的小时
+          var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);//计算剩余的分钟
+          var seconds = parseInt(leftTime / 1000 % 60, 10);//计算剩余的秒数
+          hours = this.checkTime(hours);
+          minutes = this.checkTime(minutes);
+          seconds = this.checkTime(seconds);
+          this.time_count = hours+"小时" + minutes+"分"+seconds+"秒";
+        }else{
+          this.timeCountShow = false
+          var day = new Date(time); //将毫秒转化为当前日期
+          var year = day.getFullYear();
+          var month = day.getMonth()+1;
+          var date = day.getDate();
+          var hour = day.getHours();
+          var minutes = day.getMinutes();
+          if(month<10){
+            month = "0"+month;
+          }
+          if(date<10){
+            date = "0"+date;
+          }
+          if(hour<10){
+            hour = "0"+hour;
+          }
+          if(minutes<10){
+            minutes = "0"+minutes;
+          }
+          this.time_count = year+"年"+month+"月"+date+"日"+hour+"时"+minutes+"分";
+        }
       },
       checkTime (i){
         if(i<10) {
@@ -225,11 +285,43 @@
         }
         return i;
       },
+      pass_watch(){
+        let params = {
+          id:this.c_id,
+          code:this.passCode
+        }
+        api.check_pass(params).then(res => {
+          console.log(res)
+          if(res.state.rc>=0){
+            this.passW = false
+            this.style_back = {}
+            this.initVideo ()
+            Toast({
+              message: '恭喜您验证通过',
+              duration: 2000
+            })
+          }else {
+            Toast({
+              message: '密码错误',
+              duration: 2000
+            })
+          }
+        }).catch(err => {
+          console.log(err)
+          Toast({
+            message: '鉴定失败',
+            duration: 2000
+          })
+        })
+      }
     }
   }
 </script>
 
 <style scoped>
+  .hidden{
+    display: none;
+  }
   .title{
     width: 100%;
     height: 1rem;
@@ -243,7 +335,20 @@
    width: 100%;
    height: 56.25vw;
    overflow: hidden;
+   position: relative;
  }
+ .pass_watch{
+   width: 70%;
+   height: 70%;
+   position: absolute;
+   background: #fff;
+   left: 15%;
+   top: 15%;
+ }
+  .pass_watch p{
+    margin: 0.25rem 0;
+    text-align: center;
+  }
   .video_box{
     width: 100%;
     height: 100%;
@@ -251,7 +356,7 @@
   .book_box{
     width: 100%;
     height: 100%;
-    background: #000;
+   /* background: #000;*/
     overflow: hidden;
   }
   .book_box p{
@@ -259,7 +364,7 @@
     color: #fff;
     margin: 0.8rem 0;
   }
-  #book_btn{
+  .book_btn,.pass_type{
    padding: 0.1rem 0.3rem;
     background: #db2e32;
     color: #fff;
@@ -267,6 +372,9 @@
     outline: none;
     font-size: 0.36rem;
     border-radius: 8px;
+  }
+  .pass_type{
+    font-size: 0.26rem;
   }
   .go_recommend{
     width: 100%;

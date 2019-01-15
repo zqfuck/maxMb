@@ -68,8 +68,9 @@
     },
     watch: {
       val (new_val, old_val) {
+        let qyID = this.q_id?this.q_id:localStorage.qy_ID
         let params = {
-          id:this.q_id,
+          id:qyID,
           value: new_val
         }
         api.search(params).then(res => {
@@ -85,8 +86,10 @@
       }
     },
     mounted () {
+     // console.log(this.q_id)
+      let qyID = this.q_id?this.q_id:localStorage.qy_ID
       const params = {
-        id:'Mg=='
+        id:qyID
       }
       api.titleList(params).then(res => {
         //console.log(res)
@@ -111,11 +114,13 @@
 
     },
    methods: {
+    // ...mapActions(['changeTit']),
      show_rank () {
        this.rank_show = true
        this.stop()
+       let qyID = this.q_id?this.q_id:localStorage.qy_ID
        let  params = {
-          id:this.q_id,
+          id:qyID,
           type:2
        }
        api.rankList(params).then(res => {

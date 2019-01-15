@@ -7,6 +7,8 @@ import store from './store'
 //import fastClick from 'fastclick'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import Mint from 'mint-ui'
+import utils from './js/utils'             //获取url参数
+Vue.prototype.$utils=utils
 import '../static/rem'
 import '../static/css/reset.css'
 import '../static/css/border.css'

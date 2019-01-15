@@ -41,7 +41,7 @@
 <script>
   import Header from '@/components/Header'
   import BookChannel from '@/components/BookChannel'
-  import { mapState } from 'vuex'
+  import { mapState,mapActions } from 'vuex'
   import api from '@/js/api'
   import BScroll from 'better-scroll'
   export default {
@@ -58,7 +58,8 @@
         },
         indexList:null,
         show_book:false,
-        column_id:''
+        column_id:'',
+        //q_id:''
       }
     },
     computed: {
@@ -69,6 +70,10 @@
       BookChannel
     },
     created () {
+
+    },
+    mounted () {
+      //console.log(this.q_id)
       this.get_swiper()
       this.list()
       this.$nextTick(() => {
@@ -78,10 +83,8 @@
         })
       })
     },
-    mounted () {
-      this.$store.commit('changeTitle','直播首页')
-    },
     methods: {
+
       list () {
         var params = {
           id: this.q_id
@@ -139,6 +142,9 @@
   }
   .index_img{
     width: 100%;
+    height: 100%;
+  }
+  .swiper_wrapper >>> .swiper-container{
     height: 100%;
   }
 .swiper_wrapper >>> .swiper-pagination-bullet{
