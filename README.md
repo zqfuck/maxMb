@@ -1,5 +1,5 @@
 # max-mb
-嘉实视频..
+嘉实视频移动端..
 > A Vue.js project
 
 ## Build Setup
