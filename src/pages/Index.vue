@@ -86,8 +86,9 @@
     methods: {
 
       list () {
+        let qyID = this.q_id?this.q_id:localStorage.qy_ID
         var params = {
-          id: this.q_id
+          id:qyID
         }
         params = JSON.stringify(params)
         api.indexList(params).then(res => {
@@ -114,8 +115,9 @@
         this.show_book = false
       },
       get_swiper () {
+        let qyID = this.q_id?this.q_id:localStorage.qy_ID
         let  params = {
-          id:this.q_id,
+          id:qyID,
           type:1
         }
         api.rankList(params).then(res => {
@@ -137,7 +139,7 @@
 <style scoped>
   .swiper_wrapper{
     width: 100%;
-    height: 2.7rem;
+    height: 2.4rem;
     overflow: hidden;
   }
   .index_img{

@@ -150,12 +150,11 @@
 <style scoped>
   .banner_wrapper{
     width: 100%;
-    height: 0;
-    overflow: hidden;
-    padding-bottom: 36%;
+    height: 2.4rem;
   }
   .banner_wrapper img{
     width: 100%;
+    height: 100%;
   }
   .channel_list{
     width: 100%;
