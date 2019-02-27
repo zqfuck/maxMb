@@ -1,8 +1,8 @@
 <template>
   <div style="height: 100vh;">
-    <Header></Header>
+    <Header :styleIndex="true" :homeIndex="false"></Header>
     <BookChannel :showBox="show_book" :columnId="column_id" @cancel="cancel_book"></BookChannel>
-    <div ref="wrap" style="overflow: hidden;height: calc( 100% - 2rem )">
+    <div ref="wrap" style="overflow: hidden;height: calc( 100% - 1.8rem )">
       <div>
         <div class="swiper_wrapper">
           <swiper :options="swiperOption"  ref="mySwiper">
@@ -15,12 +15,14 @@
           </swiper>
         </div>
         <div class="channel_list" v-for="(item, index) in indexList" :key="item.column_id">
-          <p style="padding-left: 0.23rem;padding-right: 0.32rem;">
-            <span style="font-size: 0.3rem;color: #4c5568;">{{item.column_name}}</span>
+          <p style="padding-left: 0.23rem;height: 0.6rem;">
             <router-link :to="{name:'List',params:{id:item.column_id}}">
-              <span class="fr" style="cursor:pointer;position: relative;top: 0.1rem;"><img src="../assets/more.png" alt="" style="width: 32px;"></span>
+              <span style="font-size: 0.3rem;color: #4c5568;">{{item.column_name}}</span>
             </router-link>
-            <span @click="bookNow(item.column_id)" class="fr" ><img src="../assets/ding.png" alt="" style="margin-right: 0.5rem;width: 24px;"></span>
+           <!-- <router-link :to="{name:'List',params:{id:item.column_id}}">
+              <span class="fr" style="cursor:pointer;position: relative;top: 0.1rem;"><img src="../assets/more.png" alt="" style="width: 32px;"></span>
+            </router-link>-->
+            <span @click="bookNow(item.column_id)" class="fr" ><img src="../assets/ding.png" alt="" style="margin-right: 0.3rem;width: 24px;"></span>
           </p>
           <div class="pic_box" v-for="(msg, num) in item.contentlist3" :key="msg.content_id">
            <router-link :to="{name:'Detail',params:{id: msg.content_id }}">
@@ -28,7 +30,7 @@
                <img :src='msg.content_img ? msg.content_img : "../../static/ban.jpg"' alt="">
                <span class="status_text">{{live_type (msg.live_type)}}</span>
              </div>
-             <p style="margin-top: 0.35rem;text-align: left;font-size: 0.28rem">{{msg.name}}</p>
+             <p style="margin-top: 0.15rem;text-align: left;font-size: 0.2rem;clear: both;">{{msg.name|delstr13}}</p>
            </router-link>
           </div>
 
@@ -71,6 +73,11 @@
     },
     created () {
 
+    },
+    filters:{
+      delstr13 (val){
+        return val.substr(0,13) + "..."
+      }
     },
     mounted () {
       //console.log(this.q_id)
@@ -159,35 +166,38 @@
     width: 100%;
     height: auto;
     background: #fff;
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
     margin-top: 0.15rem;
+    clear: both;
+    overflow: hidden;
   }
   .pic_box{
-    /*width: 100%;*/
+    width: 46%;
+    float: left;
     text-align: center;
-    margin: 0.5rem 0.2rem 0rem 0.2rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #cdcdcd;
+    margin: 0.3rem 0.05rem 0rem 0.15rem;
+    padding-bottom: 0.3rem;
+    /*border-bottom: 1px solid #cdcdcd;*/
   }
   .img_box{
     width: 100%;
     height: 2rem;
     overflow: hidden;
-    border-radius: 10px;
+   /* border-radius: 10px;*/
     position: relative;
   }
 .img_box img{
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+  /*border-radius: 10px;*/
 }
   .status_text{
     position: absolute;
-    right: 15px;
-    top: 15px;
+    right: 4px;
+    top: 4px;
     background: #db2e32;
     color: #fff;
-    padding: 4px 10px;
+    padding: 2px 5px;
     border-radius: 15px;
   }
 </style>

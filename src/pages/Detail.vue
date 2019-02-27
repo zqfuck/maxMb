@@ -1,14 +1,14 @@
 <template>
   <div style="width: 100vw;height: 100vh;overflow: hidden;">
-    <div class="title">
+   <!-- <div class="title">
       <p>{{video_name}}</p>
-    </div>
+    </div>-->
     <div class="video_wrapper" ref="video_wrapper" :style="style_back">
       <div v-if="video_show!=1" class="video_box" id="videoSS">
       </div>
       <div v-else class="book_box">
         <Book :showBox="show_book" :cid="this.c_id" @cancel="cancel_book"></Book>
-        <p style="font-size: 0.5rem;">{{time_count}}</p>
+        <p style="font-size: 0.5rem;margin-top: 1.2rem;">{{time_count}}</p>
         <p v-if="isBook"><button class="book_btn"  @click="bookNow">立即预约</button></p>
         <p v-else><span class="book_btn" >敬请期待</span></p>
       </div>
@@ -35,17 +35,17 @@
           <div class="intro_box">
             <div style="padding-bottom: 0.5rem;border-bottom: 1px solid #cdcdcd">
               <p style="margin: 0.45rem 0 0.35rem 0;">
-              <span style="color: #4c5568;font-size: 0.28rem;display: inline-block;width: 50%;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{video_name}}</span>
+              <span style="color: #4c5568;font-size: 0.3rem;font-weight:bold;display: inline-block;width: 50%;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{video_name}}</span>
                 <span ><img class="little_img" style="margin-top: 0.1rem;" src="../assets/eye.png" alt=""><span class="font_">{{pv}}</span></span>
                 <span ><img class="little_img" src="../assets/zan.png" alt=""  @click="zan"><span class="font_">{{like}}</span></span>
               </p>
               <p id="intro" style="font-size: 0.28rem;color: #646e83;line-height:26px;">
-                <span style="text-align: left;">简介:</span> <span v-html="content_desc"></span>
+                <span style="text-align: left;display: block;margin-bottom: 0.15rem;font-weight: bold;">简介</span> <span v-html="content_desc"></span>
               </p>
             </div>
             <div style="padding-bottom: 0.5rem;">
-              <p style="margin: 0.45rem 0 0.35rem 0;">
-              <span style="color: #4c5568;font-size: 0.28rem;display: inline-block;width: 50%;">
+              <p style="margin: 0.45rem 0 0.2rem 0;">
+              <span style="color: #4c5568;font-size: 0.28rem;display: inline-block;width: 50%;font-weight: bold;">
                 频道介绍</span>
               </p>
               <p style="font-size: 0.28rem;color: #646e83;line-height:26px;text-align: justify;">
@@ -386,7 +386,7 @@
     text-align: center;
   }
   .tab_box{
-    height: calc( 100% - 1.74rem - 56.25vw );
+    height: calc( 100% - 0.74rem - 56.25vw );
   }
   .tab_box >>> .mint-navbar{
     height: 1rem;

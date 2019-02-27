@@ -8,10 +8,12 @@
       </ul>
     </header>
     <div class="search_box">
-      <router-link to="/"><span class="bg_white"><img src="../assets/home.png" alt=""></span></router-link>
-      <input type="text"  @focus="show_sear" class="inp" placeholder="输入节目标题或嘉宾">
+      <router-link to="/"><span v-if="homeIndex" class="bg_white"><img src="../assets/home.png" alt=""></span>
+
+      </router-link>
+      <input type="text"  @focus="show_sear" class="inp"  :class="styleIndex ? 'inpIndex':''" placeholder="输入节目标题或嘉宾">
       <span class="bg_white" @click="show_rank" style="margin-left: 0;margin-right: 0.16rem;"><img src="../assets/lie.png" alt=""></span>
-      <img src="../assets/fang.png" alt="" style="position: absolute;left: 18%;width: 0.28rem;height: 0.28rem;">
+      <img src="../assets/fang.png" alt="" :class="styleIndex ? 'imgIndex':''" style="position: absolute;left: 18%;width: 0.28rem;height: 0.28rem;">
     </div>
     <!--排行榜-->
     <div v-show="rank_show" class="rankBox">
@@ -30,10 +32,14 @@
         <p><input type="text" v-focus ref="inp" autofocus v-model="val" placeholder="输入节目标题或嘉宾"> <span @click="cancel_sear">取消</span></p>
       </div>
       <div class="search_list">
-        <ul>
-          <router-link v-for="(item,index) in sear_list" :key="item.cid" :to="{name:'Detail',params:{id:item.cid}}">
-            <li >{{item.name}}</li>
-          </router-link>
+        <ul v-if="sear_list.length>0" style="margin-bottom: 0.6rem;">
+            <li  @click="toDetail(item.cid,item.name)" v-for="(item,index) in sear_list" :key="item.cid">{{item.name}}</li>
+        </ul>
+        <span v-if="del_show" class="delHis" @click="delHis">清除历史</span>
+        <ul class="rankList">
+          <li @click="toDetail(item.cid,item.name)" v-for="(item,index) in hot_list" :key="item.cid">
+            <span :class="{first:index==0,second:index==1,third:index==2}">{{index+1}}</span>{{item.name}}
+          </li>
         </ul>
       </div>
     </div>
@@ -52,10 +58,13 @@
         title_list:[],
         sear_list:[],
         rank_list: [],
+        hot_list:[],
         rank_show:false,
-        sear_show:false
+        sear_show:false,
+        del_show:false
       }
     },
+    props:['homeIndex','styleIndex'],
     computed: {
       ...mapState(['q_id'])
     },
@@ -82,11 +91,15 @@
           }
         }).catch(err => {
           console.log(err)
+          if(localStorage.qnSearchHistory){
+            let arr = JSON.parse(localStorage.qnSearchHistory)
+            this.sear_list = arr
+            this.del_show = true
+          }
         })
       }
     },
     mounted () {
-     // console.log(this.q_id)
       let qyID = this.q_id?this.q_id:localStorage.qy_ID
       const params = {
         id:qyID
@@ -136,9 +149,56 @@
        this.$nextTick( () => {
          this.$refs.inp.focus()
        })
+       if(localStorage.qnSearchHistory){
+         let arr = JSON.parse(localStorage.qnSearchHistory)
+         this.sear_list = arr
+         this.del_show = true
+       }
+       let qyID = this.q_id?this.q_id:localStorage.qy_ID
+       let params = {
+         id:qyID
+       }
+       api.hot_search(params).then(res => {
+         console.log(res)
+         if(res.state.rc>=0){
+           this.hot_list = res.result.items
+         }
+       }).catch(err => {
+         console.log(err)
+       })
      },
-     toDetail (cid) {
+     toDetail (cid,name) {
        this.$router.push({name:'Detail',params:{id: cid }})
+       if(localStorage.qnSearchHistory){
+         let arr = JSON.parse(localStorage.qnSearchHistory);
+         let flag = true
+         for (var i=0;i<arr.length;i++) {
+          if(arr[i].cid==cid){
+            flag=false
+          }
+         }
+         if(flag){
+           arr.push({'name':name,'cid':cid});
+         }
+         if(arr.length>5){
+           arr = arr.slice(-5)
+           localStorage.qnSearchHistory=JSON.stringify(arr)
+         }else {
+           localStorage.qnSearchHistory=JSON.stringify(arr)
+         }
+       }else {
+         let arr = [{
+             'name':name,
+             'cid':cid
+           }]
+         localStorage.qnSearchHistory=(JSON.stringify(arr))
+       }
+
+     },
+     delHis(){
+       localStorage.removeItem('qnSearchHistory')
+       this.sear_list=[]
+       this.del_show = false
      },
      cancel_rank () {
        this.rank_show = false
@@ -149,6 +209,7 @@
        this.move()
        this.val = ''
        this.sear_list = []
+       this.del_show = false
      },
      //实现滚动条无法滚动
       mo (e) {
@@ -171,16 +232,19 @@
 <style scoped>
   header{
     width: 100%;
-    height: 1rem;
+    height: 0.8rem;
     overflow: hidden;
-    line-height: 1rem;
-    font-size: 0.3rem;
+    line-height: 0.8rem;
+    font-size: 0.28rem;
     color: #acacbe;
     background: #fff;
 
   }
   menu_Nav{
     display: inline-block;
+  }
+  .margin4{
+    margin-left: -4%;
   }
   .wrapper li{
     display: inline-block;
@@ -189,7 +253,7 @@
   .router-link-active{
     color: #4c5568;
     border-bottom: 5px solid #db2e32;
-    padding: 0.25rem 0;
+    padding: 0.17rem 0;
   }
   .search_box{
     width: 100%;
@@ -211,6 +275,15 @@
     text-align: center;
     margin-left: 0.16rem;
   }
+  .bg_white2{
+    display: inline-block;
+    width: 0.67rem;
+    height: 0.67rem;
+    line-height: 0.67rem;
+    border-radius: 50%;
+    text-align: center;
+    margin-left: 0.16rem;
+  }
   .bg_white img{
     width: 0.38rem;
     vertical-align: middle;
@@ -226,6 +299,13 @@
     padding-left: 10%;
     font-size: 0.3rem;
     color: #aca3be;
+  }
+  .inpIndex{
+    width: 62%!important;
+    margin-left: 8%!important;
+  }
+  .imgIndex{
+    left: 12% !important;
   }
   .rankBox,.sear_box{
     z-index: 10;
@@ -302,10 +382,20 @@
     background: #fff;
     border-radius: 10px;
     padding: 0.15rem;
+    position: relative;
   }
   .search_list li{
     padding: 0.2rem 0;
     border-bottom: 1px solid #cdcdcd;
     color: #4c5568;
+  }
+  .delHis{
+    display: inline-block;
+    font-size: 0.22rem;
+    height: 25px;
+    color: #db2e32;
+    position: absolute;
+    right: 20px;
+    top: 8px;
   }
 </style>

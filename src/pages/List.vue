@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100vh;background: #fff;">
-    <Header></Header>
-    <div style="overflow: scroll;height: calc( 100% - 2rem )">
+    <Header :homeIndex="true" :styleIndex="false"></Header>
+    <div style="overflow: scroll;height: calc( 100% - 1.8rem )">
       <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <div class="banner_wrapper">
           <img :src='this.column_img?this.column_img:"http://qnrj-vod.homecdn.com/a0113b521fd74ace8558cedadc91508c.png"' alt="">
@@ -174,21 +174,21 @@
     width: 100%;
     height: 2rem;
     overflow: hidden;
-    border-radius: 10px;
+   /* border-radius: 10px;*/
     position: relative;
   }
 .img_box img{
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+ /* border-radius: 10px;*/
 }
   .status_text{
     position: absolute;
-    right: 15px;
-    top: 15px;
+    right: 4px;
+    top: 4px;
     background: #db2e32;
     color: #fff;
-    padding: 4px 10px;
+    padding: 2px 5px;
     border-radius: 15px;
   }
 </style>

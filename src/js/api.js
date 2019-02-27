@@ -108,6 +108,12 @@ export default {
   check_pass (params) {
     return fetchGet('/appapi/wx/authorize',params)
   },
+  /**
+   *.热搜列表
+   * */
+  hot_search (params) {
+    return fetchGet('/appapi/app/hotsearch',params)
+  },
 }
 
 
