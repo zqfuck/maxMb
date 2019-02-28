@@ -2,7 +2,7 @@
   "name": "max-mb",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "zq <1083518075@qq.com>",
+  "author": "zhaoqi <1083518075@qq.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
