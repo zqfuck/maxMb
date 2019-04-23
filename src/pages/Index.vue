@@ -7,7 +7,7 @@
         <div class="swiper_wrapper">
           <swiper :options="swiperOption"  ref="mySwiper">
             <!-- 这部分放你要渲染的那些内容 -->
-            <swiper-slide v-for="item in swiperImg" :key="item.cid">
+            <swiper-slide v-for="(item,index) in swiperImg" :key="index">
                 <img :src="item.imgUrl" class="index_img" @click="toDetail(item.cid)">
             </swiper-slide>
             <!-- 这是轮播的小圆点 -->
@@ -30,10 +30,14 @@
                <img :src='msg.content_img ? msg.content_img : "../../static/ban.jpg"' alt="">
                <span class="status_text">{{live_type (msg.live_type)}}</span>
              </div>
-             <p style="margin-top: 0.15rem;text-align: left;font-size: 0.2rem;clear: both;">{{msg.name|delstr13}}</p>
+             <p style="margin-top: 0.15rem;text-align: left;font-size: 0.2rem;clear: both;
+             overflow: hidden;text-overflow: ellipsis;display:-webkit-box; -webkit-box-orient:vertical;-webkit-line-clamp:2; ">
+               {{msg.name}}</p>
            </router-link>
           </div>
-
+          <router-link :to="{name:'List',params:{id:item.column_id}}">
+            <p v-if="item.contentlist3.length>=4" style="text-align: center;font-size: 0.7rem;color: #db2e32;width: 100%;clear: both;height: 0.5rem;line-height: 0.5rem;">…</p>
+          </router-link>
         </div>
       </div>
       </div>
@@ -176,7 +180,7 @@
     float: left;
     text-align: center;
     margin: 0.3rem 0.05rem 0rem 0.15rem;
-    padding-bottom: 0.3rem;
+    padding-bottom: 0.2rem;
     /*border-bottom: 1px solid #cdcdcd;*/
   }
   .img_box{

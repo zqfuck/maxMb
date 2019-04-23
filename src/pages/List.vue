@@ -13,7 +13,8 @@
                 <img :src='item.img?item.img:"../../static/ban.jpg"' alt="">
                 <span class="status_text">{{live_type (item.live_type)}}</span>
               </div>
-              <p style="margin-top: 0.35rem;text-align: left;font-size: 0.28rem">{{item.description}}</p>
+              <p style="text-align: left;color: #333;font-size: 0.28rem;margin-top: 0.2rem;">{{item.name}}</p>
+              <p style="margin-top: 0.15rem;text-align: left;font-size: 0.24rem">{{item.description}}</p>
             </router-link>
           </div>
         </div>
@@ -161,7 +162,7 @@
     height: auto;
     background: #fff;
     padding-bottom: 0.5rem;
-    margin-top: 0.15rem;
+   /* margin-top: 0.15rem;*/
   }
   .pic_box{
     /*width: 100%;*/
@@ -172,14 +173,14 @@
   }
   .img_box{
     width: 100%;
-    height: 2rem;
+  /*  height: 2rem;*/
     overflow: hidden;
    /* border-radius: 10px;*/
     position: relative;
   }
 .img_box img{
   width: 100%;
-  height: 100%;
+ /* height: 100%;*/
  /* border-radius: 10px;*/
 }
   .status_text{

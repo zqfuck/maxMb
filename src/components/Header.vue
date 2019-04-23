@@ -8,7 +8,7 @@
       </ul>
     </header>
     <div class="search_box">
-      <router-link to="/"><span v-if="homeIndex" class="bg_white"><img src="../assets/home.png" alt=""></span>
+      <router-link to="/"><span v-if="homeIndex" class="bg_white" style="margin-top: 0.2rem;"><img src="../assets/home.png" alt=""></span>
 
       </router-link>
       <input type="text"  @focus="show_sear" class="inp"  :class="styleIndex ? 'inpIndex':''" placeholder="输入节目标题或嘉宾">
@@ -232,10 +232,10 @@
 <style scoped>
   header{
     width: 100%;
-    height: 0.8rem;
+    height: 0.7rem;
     overflow: hidden;
-    line-height: 0.8rem;
-    font-size: 0.28rem;
+    line-height: 0.7rem;
+    font-size: 0.24rem;
     color: #acacbe;
     background: #fff;
 
@@ -248,7 +248,7 @@
   }
   .wrapper li{
     display: inline-block;
-    padding: 0 0.25rem;
+    padding: 0 0.2rem;
   }
   .router-link-active{
     color: #4c5568;
@@ -257,8 +257,8 @@
   }
   .search_box{
     width: 100%;
-    height: 1rem;
-    line-height: 1rem;
+    height: 0.7rem;
+    line-height: 0.7rem;
     display: flex;
    align-items: center;
     background: #ebedf1;
@@ -267,9 +267,9 @@
   }
   .bg_white{
     display: inline-block;
-    width: 0.67rem;
-    height: 0.67rem;
-    line-height: 0.67rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    line-height: 0.5rem;
     background: #fff;
     border-radius: 50%;
     text-align: center;
@@ -277,9 +277,9 @@
   }
   .bg_white2{
     display: inline-block;
-    width: 0.67rem;
-    height: 0.67rem;
-    line-height: 0.67rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    line-height: 0.5rem;
     border-radius: 50%;
     text-align: center;
     margin-left: 0.16rem;
@@ -290,14 +290,14 @@
   }
   .inp{
     width: 59%;
-    height: 0.67rem;
-    line-height: 0.67rem;
+    height: 0.5rem;
+    line-height: 0.5rem;
     margin: 0 0.15rem;
     border-radius: 20px;
     border: none;
     outline: none;
     padding-left: 10%;
-    font-size: 0.3rem;
+    font-size: 0.24rem;
     color: #aca3be;
   }
   .inpIndex{

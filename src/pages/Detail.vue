@@ -8,7 +8,8 @@
       </div>
       <div v-else class="book_box">
         <Book :showBox="show_book" :cid="this.c_id" @cancel="cancel_book"></Book>
-        <p style="font-size: 0.5rem;margin-top: 1.2rem;">{{time_count}}</p>
+        <div style="width: 100%;height: 100%;position: absolute;left: 0;top: 0;background: #333;opacity: 0.6;"></div>
+        <p style="font-size: 0.5rem;margin-top: 1.2rem;z-index: 9;position: relative;">{{time_count}}</p>
         <p v-if="isBook"><button class="book_btn"  @click="bookNow">立即预约</button></p>
         <p v-else><span class="book_btn" >敬请期待</span></p>
       </div>
@@ -18,9 +19,9 @@
         <p><button class="book_btn pass_type" @click="pass_watch">确定</button></p>
       </div>
     </div>
-    <div class="go_recommend">
-      <p v-if="product_link"><a :href="product_link" style="color: inherit!important;">立即了解本栏目推荐的产品</a></p>
-      <p v-else>本栏目暂无推荐的产品</p>
+    <div  v-if="product_link" class="go_recommend">
+      <p ><a :href="product_link" style="color: inherit!important;">立即了解本栏目推荐的产品</a></p>
+      <!--<p v-else>本栏目暂无推荐的产品</p>-->
     </div>
     <div class="tab_box">
       <mt-navbar v-model="selected">
@@ -363,6 +364,8 @@
     text-align: center;
     color: #fff;
     margin: 0.8rem 0;
+    position: relative;
+    z-index: 9;
   }
   .book_btn,.pass_type{
    padding: 0.1rem 0.3rem;
@@ -422,6 +425,8 @@
   }
   .little_img{
    margin: 0.05rem 0.1rem 0;
+    width: 24px;
+    vertical-align: text-bottom;
   }
   .guest_box{
     display: flex;

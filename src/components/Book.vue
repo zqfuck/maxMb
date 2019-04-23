@@ -1,14 +1,20 @@
 <template>
   <div>
       <div v-show="showBox" class="book_box">
-        <p style="font-size: 0.3rem;color: #db2e32;font-weight: bold;">用户预约</p>
-        <p style="display: flex;justify-content: space-between">
-          <input class="tel" v-model="tel" type="number" placeholder="请输入手机号码">
+        <p style="font-size: 0.32rem;
+    color: #4c5568;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    text-align: center;">用户预约</p>
+        <p style="display: flex;justify-content: space-between;margin-bottom: 0.4rem;">
+          <input class="tel" v-model="tel" style="padding-left: 0.2rem;font-size: 0.3rem;" type="number" placeholder="请输入手机号码">
+
+        </p>
+        <p style="display: flex;justify-content: space-between"><input type="text" placeholder="请输入验证码" v-model="code" style="width: 61%;height: 0.6rem;padding-left: 0.2rem;font-size: 0.3rem;">
           <button v-show="time" @click="timeOut" class="code_btn">获取验证码</button>
           <button v-show="!time" class="time_out">{{timeCount}}秒</button>
         </p>
-        <p><input type="text" placeholder="请输入验证码" v-model="code" style="width: 60%;height: 0.5rem;"></p>
-        <p>通过手机号订阅之后</br>本频道有更新会下发到您的手机</p>
+        <p style="color:#a3acbe;">通过手机号订阅之后,本频道有更新会下发到您的手机</p>
         <p><button @click="cancel" class="cancel">取消</button><button @click="book" class="book">预约</button></p>
       </div>
     <div v-show="showBox" class="mask">
@@ -173,30 +179,33 @@
 
   }
   .tel{
-    width: 60%;
-    height: 0.5rem;
+    width: 100%;
+    height: 0.6rem;
   }
   .time_out{
     display: inline-block;
     padding: 0 0.3rem;
   }
   .code_btn,.time_out{
-    background: #db2e32;
-    color: #fff;
-    border: none;
+    background: #fff;
+    color: #db2e32;
+    border: 1px solid #db2e32;
     outline: none;
-    border-radius: 5px;
   }
   .cancel,.book{
-    height: 0.5rem;
+    height: 0.64rem;
     border: none;
     outline: none;
     background: #db2e32;
     color: #fff;
-    padding: 0 0.3rem;
+    padding: 0 0.4rem;
     border-radius: 5px;
     margin: 0 0.4rem;
   }
+.cancel{
+  background: #a1acc0;
+  color: #fff;
+}
   .mask{
     position: fixed;left: 0;
     top: 0;
