@@ -98,7 +98,7 @@
         let data = {
           page: this.page,
           pagesize: this.pagesize,
-          voteid: this.q_id,
+          id: this.q_id,
           columnid:this.columnid
         }
         api.channelList(data).then(res => {
@@ -119,7 +119,7 @@
         let data = {
           page: that.page,
           pagesize: that.pagesize,
-          voteid: this.q_id,
+          id: this.q_id,
           columnid:this.columnid
         }
         api.channelList(data).then(res => {

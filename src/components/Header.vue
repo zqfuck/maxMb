@@ -11,7 +11,7 @@
       <router-link to="/"><span v-if="homeIndex" class="bg_white" style="margin-top: 0.2rem;"><img src="../assets/home.png" alt=""></span>
 
       </router-link>
-      <input type="text"  @focus="show_sear" class="inp"  :class="styleIndex ? 'inpIndex':''" placeholder="输入节目标题或嘉宾">
+      <input type="text"  @focus="show_sear" class="inp"  :class="styleIndex ? 'inpIndex':''" placeholder="输入节目标题">
       <span class="bg_white" @click="show_rank" style="margin-left: 0;margin-right: 0.16rem;"><img src="../assets/lie.png" alt=""></span>
       <img src="../assets/fang.png" alt="" :class="styleIndex ? 'imgIndex':''" style="position: absolute;left: 18%;width: 0.28rem;height: 0.28rem;">
     </div>
