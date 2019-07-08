@@ -24,6 +24,7 @@ Vue.filter('delstr',(val) => {
   return val.substr(0,9)+'...'
 })
 new Vue({
+
   el: '#app',
   router,
   store,
