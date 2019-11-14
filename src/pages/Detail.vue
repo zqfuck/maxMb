@@ -389,7 +389,7 @@
     text-align: center;
   }
   .tab_box{
-    height: calc( 100% - 0.74rem - 56.25vw );
+    height: calc( 100% - 56.25vw );
   }
   .tab_box >>> .mint-navbar{
     height: 1rem;

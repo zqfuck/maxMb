@@ -110,7 +110,7 @@
                 this.$emit('cancel')
               }else {
                 Toast({
-                  message: '您已经订阅过此频道',
+                  message: '您获取验证码次数过多',
                   duration: 2000
                 })
                 this.tel = ''

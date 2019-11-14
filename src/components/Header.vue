@@ -29,7 +29,7 @@
     <!--搜索-->
     <div v-show="sear_show" class="sear_box">
       <div class="inp_box">
-        <p><input type="text" v-focus ref="inp" autofocus v-model="val" placeholder="输入节目标题或嘉宾"> <span @click="cancel_sear">取消</span></p>
+        <p><input type="text" v-focus ref="inp" autofocus v-model="val" placeholder="输入节目标题"> <span @click="cancel_sear">取消</span></p>
       </div>
       <div class="search_list">
         <ul v-if="sear_list.length>0" style="margin-bottom: 0.6rem;">

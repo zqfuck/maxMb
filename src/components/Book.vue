@@ -111,7 +111,7 @@
                 this.$emit('cancel')
               }else {
                 Toast({
-                  message: '您已经预约过此内容',
+                  message: '您获取验证码次数过多',
                   duration: 2000
                 })
                 this.tel = ''
