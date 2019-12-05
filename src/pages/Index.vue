@@ -127,6 +127,7 @@ export default {
     bookNow(id) {
       this.show_book = true;
       this.column_id = id;
+      
     },
     cancel_book() {
       this.show_book = false;
