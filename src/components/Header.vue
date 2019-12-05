@@ -2,8 +2,8 @@
   <div>
     <header class="wrapper" ref="wrapper">
       <ul class="menu_Nav " ref="li_list">
-        <router-link  v-for="(item,idex) in title_list" tag="span" :key="item.column_id" :to="{name: 'List', params:{id: item.column_id,column_img:item.column_img,title:item.column_name}}">
-          <li class="nav_list">{{item.column_name}}</li>
+        <router-link  v-for="(item,idex) in title_list" tag="li" :key="item.column_id" :to="{name: 'List', params:{id: item.column_id,column_img:item.column_img,title:item.column_name}}">
+         {{item.column_name}}
         </router-link>
       </ul>
     </header>
@@ -105,13 +105,29 @@
         id:qyID
       }
       api.titleList(params).then(res => {
-        //console.log(res)
+        console.log(res)
         this.title_list = res.result
-        if(this.title_list.length>4){
-          this.$refs.li_list.style.width = (28 * this.title_list.length) + '%';
-        }else {
-          this.$refs.li_list.style.width = '100%'
+
+
+        let widthAll = 0;
+        res.result.forEach((item,index) => {
+          widthAll+=item.column_name.length*15
+        })
+        widthAll+= res.result.length * 20;
+        let windowWidth = document.body.clientWidth ;
+       console.log(windowWidth + '------' + widthAll)
+        if(widthAll>windowWidth){
+          var windowWidthP = parseInt(widthAll) / parseInt(windowWidth) * 100;
+            this.$refs.li_list.style.width = windowWidthP + '%'
+        }else{
+           this.$refs.li_list.style.width = '100%'
         }
+        
+        // if(this.title_list.length>4){
+        //   this.$refs.li_list.style.width = (28 * this.title_list.length) + '%';
+        // }else {
+        //   this.$refs.li_list.style.width = '100%'
+        // }
         this.$nextTick(() => {
           this.scroll = new BScroll(this.$refs.wrapper,{
             scrollY: false ,
@@ -246,15 +262,21 @@
   .margin4{
     margin-left: -4%;
   }
+  .wrapper ul{
+    display: flex;
+   height: 100%;
+    justify-content: space-around;
+  }
   .wrapper li{
     display: inline-block;
-    padding: 0 0.2rem;
+    /* padding: 0 0.2rem; */
   }
   .router-link-active{
     color: #4c5568;
     border-bottom: 5px solid #db2e32;
-    padding: 0.17rem 0;
+    /* padding: 0.17rem 0; */
   }
+ 
   .search_box{
     width: 100%;
     height: 0.7rem;

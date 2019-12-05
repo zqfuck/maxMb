@@ -7,7 +7,7 @@
           <img :src='this.column_img?this.column_img:"http://qnrj-vod.homecdn.com/a0113b521fd74ace8558cedadc91508c.png"' alt="">
         </div>
         <div class="channel_list">
-          <div class="pic_box" v-for="(item, index) in channelList">
+          <div class="pic_box" v-for="(item) in channelList" :key="item.cid">
             <router-link :to="{name:'Detail',params:{id:item.cid}}">
               <div class="img_box">
                 <img :src='item.img?item.img:"../../static/ban.jpg"' alt="">
@@ -59,6 +59,7 @@
     },
     mounted () {
       this.rePageList()
+      this.$store.commit('changeTitle',this.column_title)
      // this.scroll = new BScroll(this.$refs.wrapper)
     },
     watch: {

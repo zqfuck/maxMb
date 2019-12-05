@@ -15,7 +15,10 @@
           <button v-show="!time" class="time_out">{{timeCount}}秒</button>
         </p>
         <p style="color:#a3acbe;">通过手机号订阅之后,本频道有更新会下发到您的手机</p>
-        <p><button @click="cancel" class="cancel">取消</button><button @click="book" class="book">预约</button></p>
+        <p>
+          <button @click="book" class="book">预约</button>
+          <button @click="cancel" class="cancel">取消</button>
+        </p>
       </div>
     <div v-show="showBox" class="mask">
 
@@ -90,7 +93,7 @@
             duration: 2000
           })
         }},
-      book(){
+      book () {
         if(this.checkPhone(this.tel)){
           if(this.code!=''){
             var params = {
@@ -191,6 +194,7 @@
     color: #db2e32;
     border: 1px solid #db2e32;
     outline: none;
+    flex-shrink: 0;
   }
   .cancel,.book{
     height: 0.64rem;

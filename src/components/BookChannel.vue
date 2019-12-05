@@ -14,7 +14,7 @@
           <button v-show="!time" class="time_out">{{timeCount}}秒</button>
         </p>
         <p>通过手机号订阅之后,本频道有更新会下发到您的手机</p>
-        <p><button @click="cancel" class="cancel">取消</button><button @click="book_channel" class="book">预约</button></p>
+        <p><button @click="book_channel" class="book">预约</button><button @click="cancel" class="cancel">取消</button></p>
       </div>
     <div v-show="showBox" class="mask">
 
@@ -45,7 +45,7 @@
       }
     },
     mounted () {
-
+     
     },
     methods: {
       timeOut () {
@@ -190,6 +190,7 @@
     color: #db2e32;
     border: 1px solid #db2e32;
     outline: none;
+    flex-shrink: 0;
   }
   .cancel,.book{
     height: 0.64rem;

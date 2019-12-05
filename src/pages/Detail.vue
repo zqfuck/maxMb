@@ -67,7 +67,7 @@
             </div>
           </div>
           <div>
-            <p style="margin-bottom: 0.4rem;">
+            <p style="margin-bottom: 0.4rem;display:flex;align-items:center;margin-top:0.3rem;">
               <span style="display: inline-block;width: 0.05rem;height: 0.3rem;background: #db2e32;margin-right: 0.1rem;"></span>
               <span style="color: #4c5568;font-size: 0.3rem;">关联节目</span>
             </p>
