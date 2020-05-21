@@ -14,7 +14,7 @@
           <button v-show="!time" class="time_out">{{timeCount}}秒</button>
         </p>
         <p>通过手机号订阅之后,本频道有更新会下发到您的手机</p>
-        <p><button @click="book_channel" class="book">预约</button><button @click="cancel" class="cancel">取消</button></p>
+        <p><button @click="book_channel" class="book">订阅</button><button @click="cancel" class="cancel">取消</button></p>
       </div>
     <div v-show="showBox" class="mask">
 
@@ -33,7 +33,8 @@
         code:'',
         time:true,
         showBook:this.showBox,
-        timeCount:60
+        timeCount:60,
+        timer:null
       }
     },
     props: [ 'showBox','columnId' ],
@@ -64,16 +65,18 @@
               this.tel = ''
               this.code = ''
               this.$emit('cancel')
+                clearInterval(this.timer)
+                  this.timeCount = 60
             }else {
               this.time=!this.time
               Toast({
                 message: '短信验证码已发送您的手机',
                 duration: 2000
               })
-              let timer = setInterval( () => {
+              this.timer = setInterval( () => {
                 this.timeCount--
                 if( this.timeCount<0) {
-                  clearInterval(timer)
+                  clearInterval(this.timer)
                   this.time=!this.time
                   this.timeCount = 60
                 }
@@ -108,6 +111,11 @@
                 this.tel = ''
                 this.code = ''
                 this.$emit('cancel')
+                 clearInterval(this.timer)
+                 
+                  this.time=!this.time
+                  console.log(this.time)
+                  this.timeCount = 60
               }else {
                 Toast({
                   message: '您获取验证码次数过多',

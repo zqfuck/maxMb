@@ -37,7 +37,8 @@
         code:'',
         time:true,
         showBook:this.showBox,
-        timeCount:60
+        timeCount:60,
+        timer:null
       }
     },
     props: [ 'showBox','cid' ],
@@ -69,16 +70,18 @@
               this.tel = ''
               this.code = ''
               this.$emit('cancel')
+               clearInterval(this.timer)
+                this.timeCount = 60
             }else {
               this.time=!this.time
               Toast({
                 message: '短信验证码已发送您的手机',
                 duration: 2000
               })
-              let timer = setInterval( () => {
+              this.timer = setInterval( () => {
                 this.timeCount--
                 if( this.timeCount<0) {
-                  clearInterval(timer)
+                  clearInterval(this.timer)
                   this.time=!this.time
                   this.timeCount = 60
                 }
@@ -112,6 +115,9 @@
                 this.tel = ''
                 this.code = ''
                 this.$emit('cancel')
+                 clearInterval(this.timer)
+                  this.time=!this.time
+                  this.timeCount = 60
               }else {
                 Toast({
                   message: '您获取验证码次数过多',
