@@ -56,7 +56,7 @@
           </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
-          <div class="guest_box" v-for="(item, index) in guest">
+          <div class="guest_box" v-for="(item, index) in guest" :key="index">
             <div style="margin-right: 0.16rem;width: 0.85rem;height: 0.85rem;">
               <img style="width: 100%;border-radius: 50%;height: 100%;" :src='item.img ? item.img : "../assets/head.png"' alt="">
             </div>
@@ -72,7 +72,7 @@
               <span style="color: #4c5568;font-size: 0.3rem;">关联节目</span>
             </p>
             <div style="/*display: flex;justify-content: space-between;*/padding-bottom: 0.4rem;">
-              <div style="width: 45%;text-align: center;float: left;margin: 0 0.1rem 0.2rem 0.1rem" v-for="(item, index) in guest_relevance" @click="toDetail(item.content_id)">
+              <div style="width: 45%;text-align: center;float: left;margin: 0 0.1rem 0.2rem 0.1rem" v-for="(item, index) in guest_relevance" :key="index" @click="toDetail(item.content_id)">
                 <img style="height: 1.8rem;margin-bottom: 0.3rem;" :src='item.content_img?item.content_img:"../../static/ban.jpg"' alt="">
                 <p>{{item.name|delstr}}</p>
               </div>
@@ -80,7 +80,7 @@
           </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="3">
-            <div class="recommend" v-for="(item,index) in recommend_data" @click="toDetail(item.cid)">
+            <div class="recommend" v-for="(item,index) in recommend_data" :key="index" @click="toDetail(item.cid)">
               <img :src='item.img?item.img:"../../static/ban.jpg"' alt="" >
               <p>{{item.name}}</p>
               <span>{{live_type (item.type)}}</span>

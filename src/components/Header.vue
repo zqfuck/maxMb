@@ -2,7 +2,7 @@
   <div>
     <header class="wrapper" ref="wrapper">
       <ul class="menu_Nav " ref="li_list">
-        <router-link  v-for="(item,idex) in title_list" tag="li" :key="item.column_id" :to="{name: 'List', params:{id: item.column_id,column_img:item.column_img,title:item.column_name}}">
+        <router-link  v-for="(item) in title_list" tag="li" :key="item.column_id" :to="{name: 'List', params:{id: item.column_id,column_img:item.column_img,title:item.column_name}}">
          {{item.column_name}}
         </router-link>
       </ul>
@@ -33,7 +33,7 @@
       </div>
       <div class="search_list">
         <ul v-if="sear_list.length>0" style="margin-bottom: 0.6rem;">
-            <li  @click="toDetail(item.cid,item.name)" v-for="(item,index) in sear_list" :key="item.cid">{{item.name}}</li>
+            <li  @click="toDetail(item.cid,item.name)" v-for="(item) in sear_list" :key="item.cid">{{item.name}}</li>
         </ul>
         <span v-if="del_show" class="delHis" @click="delHis">清除历史</span>
         <ul class="rankList">

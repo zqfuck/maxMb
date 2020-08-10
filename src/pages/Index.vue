@@ -14,7 +14,7 @@
             <div class="swiper-pagination" slot="pagination"></div>
           </swiper>
         </div>
-        <div class="channel_list" v-for="(item, index) in indexList" :key="item.column_id">
+        <div class="channel_list" v-for="(item) in indexList" :key="item.column_id">
           <p style="padding-left: 0.23rem;height: 0.6rem;">
             <router-link :to="{name:'List',params:{id:item.column_id}}">
               <span style="font-size: 0.3rem;color: #4c5568;">{{item.column_name}}</span>
@@ -26,7 +26,7 @@
               <img src="../assets/ding.png" alt style="margin-right: 0.3rem;width: 24px;" />
             </span>
           </p>
-          <div class="pic_box" v-for="(msg, num) in item.contentlist3" :key="msg.content_id">
+          <div class="pic_box" v-for="(msg) in item.contentlist3" :key="msg.content_id">
             <router-link :to="{name:'Detail',params:{id: msg.content_id }}">
               <div class="img_box">
                 <img :src="msg.content_img ? msg.content_img : '../../static/ban.jpg'" alt />
